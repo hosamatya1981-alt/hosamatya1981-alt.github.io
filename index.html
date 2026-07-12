@@ -4,66 +4,74 @@
     <meta charset="UTF-8">
     <title>TrustMarket - سوق الوساطة الآمن</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0d0b21; color: #ffffff; text-align: center; padding: 50px 20px; margin: 0; }
-        .container { max-width: 600px; margin: 0 auto; background: #1a163b; padding: 40px; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); border: 1px solid #332a63; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0d0b21; color: #ffffff; }
+        .container { max-width: 600px; margin: 0 auto; background: #1a163b; padding: 40px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: center; margin-top: 50px; }
         h1 { color: #e67e22; font-size: 2.5rem; margin-bottom: 20px; }
         p { color: #b3b3b3; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px; }
-        .btn { display: inline-block; background: linear-gradient(135deg, #a04ef6, #671cd2); color: #ffffff; border: none; padding: 15px 35px; font-size: 1.2rem; font-weight: bold; border-radius: 50px; cursor: pointer; text-decoration: none; box-shadow: 0 4px 15px rgba(160, 78, 246, 0.4); transition: transform 0.2s, box-shadow 0.2s; margin: 10px; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(160, 78, 246, 0.6); }
+        .btn { display: inline-block; background: linear-gradient(135deg, #0a4ef6, #671cd2); color: #ffffff; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(160, 78, 246, 0.4); }
         .btn-pay { background: linear-gradient(135deg, #e67e22, #d35400); box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4); }
         .btn-pay:hover { box-shadow: 0 6px 20px rgba(230, 126, 34, 0.6); }
-        .badge { background: #27ae60; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+        .badge { background: #27ae60; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; }
         #user-info { margin-top: 20px; font-size: 1.1rem; color: #2ecc71; font-weight: bold; }
     </style>
-    <script src="https://minepi.com"></script>
 </head>
+<script src="https://minepi.com"></script>
 <body>
-    <div class="container">
-        <span class="badge">نظام الدفع والوساطة نشط</span>
-        <h1>TrustMarket</h1>
-        <p>مرحباً بك في منصة الوساطة والتجارة المحلية الآمنة لرواد شبكة باي.</p>
-        
-        <button id="login-btn" class="btn" onclick="authPi()">تسجيل الدخول بمحفظة Pi</button>
-        <button id="pay-btn" class="btn btn-pay" onclick="makePayment()" style="display:none;">إجراء معاملة تجريبية (1 Pi)</button>
-        <div id="user-info"></div>
-    </div>
 
-    <script>
-        Pi.init({ version: "2.0", sandbox: true });
+<div class="container">
+    <span class="badge">نظام الدفع والوساطة نشط</span>
+    <h1>TrustMarket</h1>
+    <p>مرحباً بك في منصة الوساطة والتجارة المحلية الآمنة لرواد شبكة باي.</p>
+    
+    <button id="login-btn" class="btn" onclick="authPi()">تسجيل الدخول بمحفظة Pi</button>
+    <button id="pay-btn" class="btn btn-pay" onclick="makePayment()" style="display:none;">إجراء معاملة تجريبية (1 Pi)</button>
+    <div id="user-info"></div>
+</div>
 
-        async function authPi() {
-            try {
-                const scopes = ['username', 'payments'];
-                const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
-                document.getElementById('user-info').innerHTML = `🎉 مرحباً: ${auth.user.username} ! تم تسجيل الدخول.`;
-                document.getElementById('login-btn').style.display = 'none';
-                document.getElementById('pay-btn').style.display = 'inline-block';
-            } catch (err) {
-                alert("فشل تسجيل الدخول");
-            }
-        }
+<script>
+  Pi.init({ version: "2.0", sandbox: true });
 
-        function onIncompletePaymentFound(payment) {
-            console.log("Incomplete payment:", payment);
-        }
+  async function authPi() {
+    try {
+      const scopes = ['username', 'payments'];
+      const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+      
+      document.getElementById('user-info').innerHTML = `مرحباً، ${auth.user.username}! تم تسجيل الدخول بنجاح.`;
+      document.getElementById('login-btn').style.display = 'none';
+      document.getElementById('pay-btn').style.display = 'inline-block';
+    } catch (err) {
+      console.error(err);
+      alert("فشل تسجيل الدخول: " + err.message); 
+    }
+  }
 
-        function makePayment() {
-            Pi.createPayment({
-                amount: 1,
-                memo: "Test transaction for step 10",
-                metadata: { type: "test" }
-            }, {
-                onReadyForServerApproval: function(paymentId) {
-                    console.log("onReadyForServerApproval", paymentId);
-                },
-                onReadyForServerCompletion: function(paymentId, txid) {
-                    console.log("onReadyForServerCompletion", paymentId, txid);
-                    alert("🎉 تم إكمال المعاملة بنجاح!");
-                },
-                onCancel: function(paymentId) { console.log("Cancelled", paymentId); },
-                onError: function(error, payment) { console.error("Error", error); }
-            });
-        }
-    </script>
+  function onIncompletePaymentFound(payment) {
+    console.log("Incomplete payment:", payment);
+  }
+
+  function makePayment() {
+    Pi.createPayment({
+      amount: 1,
+      memo: "Test transaction for step 10",
+      metadata: { type: "test" }
+    }, {
+      onReadyForServerApproval: function(paymentId) {
+        console.log("onReadyForServerApproval", paymentId);
+      },
+      onReadyForServerCompletion: function(paymentId, txid) {
+        console.log("onReadyForServerCompletion", paymentId, txid);
+        alert("تم إكمال المعاملة بنجاح!");
+      },
+      onCancel: function(paymentId) { 
+        console.log("Cancelled", paymentId); 
+      },
+      onError: function(error, payment) { 
+        console.error("Error", error); 
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
