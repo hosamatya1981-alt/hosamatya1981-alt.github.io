@@ -5,14 +5,13 @@ const cors = require('cors');
 const app = express();
 app.use(express.json());
 
-// فتح الأمان والسماح لموقعك بالاتصال الفوري لتأكيد المدفوعات
 app.use(cors({
     origin: 'https://github.io',
     methods: ['POST', 'GET', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-cerfc93nrci534mxfvrgjvclwatnzs0pm6kr2mjuwtefbvdu3sxtguvs8dkstq4o
+const PI_API_KEY = "cerfc93nrci534mxfvrgjvclwatnzs0pm6kr2mjuwtefbvdu3sxtguvs8dkstq4o"; 
 
 app.post('/approve', async (req, res) => {
     const { paymentId } = req.body;
