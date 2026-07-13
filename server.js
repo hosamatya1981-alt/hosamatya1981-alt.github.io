@@ -12,7 +12,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-const PI_API_KEY = "ضع_مفتاح_الـ_API_الخاص_بك_هنا"; 
+cerfc93nrci534mxfvrgjvclwatnzs0pm6kr2mjuwtefbvdu3sxtguvs8dkstq4o
 
 app.post('/approve', async (req, res) => {
     const { paymentId } = req.body;
