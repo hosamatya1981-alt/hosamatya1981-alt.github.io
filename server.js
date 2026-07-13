@@ -11,8 +11,8 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-const PI_API_KEY = "cerfc93nrci534mxfvrgjvclwatnzs0pm6kr2mjuwtefbvdu3sxtguvs8dkstq4o"; 
 
+const PI_API_KEY = process.env.PI_API_KEY;
 app.post('/approve', async (req, res) => {
     const { paymentId } = req.body;
     try {
