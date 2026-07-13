@@ -50,6 +50,8 @@
   }
 
   function makePayment() {
+    const backendUrl = "https://vercel.app";
+
     Pi.createPayment({
       amount: 1,
       memo: "Test transaction for step 10",
@@ -57,12 +59,30 @@
     }, {
       onReadyForServerApproval: function(paymentId) {
         console.log("onReadyForServerApproval", paymentId);
-        // حيلة ذكية: محاكاة موافقة السيرفر الفورية للتجربة بنجاح
-        alert("جاري تأكيد المعاملة تلقائياً في بيئة الفحص...");
+        // إرسال طلب الموافقة للسيرفر الفعلي على Vercel لإنهاء مشكلة الصلاحية
+        fetch(`${backendUrl}/approve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentId })
+        })
+        .then(res => res.json())
+        .then(data => console.log("Approved by server:", data))
+        .catch(err => console.error("Approval error:", err));
       },
       onReadyForServerCompletion: function(paymentId, txid) {
         console.log("onReadyForServerCompletion", paymentId, txid);
-        alert("تم إكمال المعاملة بنجاح وتأكيد الدفع!");
+        // إرسال طلب الإكمال النهائي للسيرفر لتثبيت المعاملة
+        fetch(`${backendUrl}/complete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentId, txid })
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("Completed by server:", data);
+          alert("تم إكمال المعاملة بنجاح وتأكيد الدفع عبر السيرفر الخارجي!");
+        })
+        .catch(err => console.error("Completion error:", err));
       },
       onCancel: function(paymentId) { 
         console.log("Cancelled", paymentId); 
@@ -73,3 +93,6 @@
     });
   }
 </script>
+
+</body>
+</html>
