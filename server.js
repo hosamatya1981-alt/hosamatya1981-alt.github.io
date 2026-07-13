@@ -4,13 +4,16 @@ const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 
-// هنا تضع مفتاح المطورين الخاص بك (Pi API Key)
-// يمكنك استخراجه من الـ Developer Portal داخل متصفح باي
+// فتح الأمان والسماح لموقعك بالاتصال الفوري لتأكيد المدفوعات
+app.use(cors({
+    origin: 'https://github.io',
+    methods: ['POST', 'GET', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 const PI_API_KEY = "ضع_مفتاح_الـ_API_الخاص_بك_هنا"; 
 
-// 1. نقطة الموافقة على الدفع (Approve Payment)
 app.post('/approve', async (req, res) => {
     const { paymentId } = req.body;
     try {
@@ -22,11 +25,10 @@ app.post('/approve', async (req, res) => {
         res.json({ success: true, data: response.data });
     } catch (error) {
         console.error("Approval Error:", error.response ? error.response.data : error.message);
-        res.status(500).json({ success: false, error: "فشلت الموافقة على العملية" });
+        res.status(500).json({ success: false, error: "فشلت الموافقة" });
     }
 });
 
-// 2. نقطة إكمال الدفع النهائي (Complete Payment)
 app.post('/complete', async (req, res) => {
     const { paymentId, txid } = req.body;
     try {
@@ -38,11 +40,11 @@ app.post('/complete', async (req, res) => {
         res.json({ success: true, data: response.data });
     } catch (error) {
         console.error("Completion Error:", error.response ? error.response.data : error.message);
-        res.status(500).json({ success: false, error: "فشل إكمال العملية نهائياً" });
+        res.status(500).json({ success: false, error: "فشل الإكمال" });
     }
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
