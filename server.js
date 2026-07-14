@@ -11,8 +11,8 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-
 const PI_API_KEY = process.env.PI_API_KEY;
+
 app.post('/approve', async (req, res) => {
     const { paymentId } = req.body;
     try {
@@ -47,5 +47,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-// version 4
 
+// version 5
