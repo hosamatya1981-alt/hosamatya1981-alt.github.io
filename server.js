@@ -17,7 +17,7 @@ app.post('/approve', async (req, res) => {
     const { paymentId } = req.body;
     try {
         const response = await axios.post(
-            `https://minepi.com{paymentId}/approve`,
+            `https://api.minepi.com/v1/payments/\${paymentId}/approve`,
             { action: 'approve' },
             { headers: { Authorization: `Key ${PI_API_KEY}` } }
         );
