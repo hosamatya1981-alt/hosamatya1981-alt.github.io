@@ -18,7 +18,7 @@ app.post('/approve', async (req, res) => {
     try {
         const response = await axios.post(
             `https://minepi.com{paymentId}/approve`,
-            {},
+            { action: 'approve' },
             { headers: { Authorization: `Key ${PI_API_KEY}` } }
         );
         res.json({ success: true, data: response.data });
@@ -47,4 +47,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-// version 2
+// version 4
+
