@@ -28,7 +28,6 @@
     </div>
 
     <script>
-        // تهيئة مكتبة المطورين بشكل صحيح للبيئة الحقيقية
         Pi.init({ version: "2.0", sandbox: false });
 
         async function authPi() {
@@ -58,7 +57,6 @@
             }, {
                 onReadyForServerApproval: function(paymentId) {
                     console.log("onReadyForServerApproval", paymentId);
-                    // إرسال طلب الموافقة للسيرفر بشكل صحيح
                     fetch(`${backendUrl}/approve`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -70,7 +68,6 @@
                 },
                 onReadyForServerCompletion: function(paymentId, txid) {
                     console.log("onReadyForServerCompletion", paymentId, txid);
-                    // إرسال طلب الإكمال النهائي لتثبيت المعاملة
                     fetch(`${backendUrl}/complete`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
