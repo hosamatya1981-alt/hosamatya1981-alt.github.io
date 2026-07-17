@@ -17,7 +17,7 @@ app.post('/approve', async (req, res) => {
     const { paymentId } = req.body;
     try {
         const response = await axios.post(
-            `https://api.minepi.com/v1/payments/\${paymentId}/approve`,
+            `https://minepi.com{paymentId}/approve`,
             { action: 'approve' },
             { headers: { Authorization: `Key ${PI_API_KEY}` } }
         );
@@ -32,7 +32,7 @@ app.post('/complete', async (req, res) => {
     const { paymentId, txid } = req.body;
     try {
         const response = await axios.post(
-            `https://api.minepi.com/v1/payments/\${paymentId}/complete`,
+            `https://minepi.com{paymentId}/complete`,
             { txid: txid },
             { headers: { Authorization: `Key ${PI_API_KEY}` } }
         );
@@ -42,10 +42,11 @@ app.post('/complete', async (req, res) => {
         res.status(500).json({ success: false, error: "فشل الإكمال" });
     }
 });
+
 app.use(express.static(__dirname));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-// version 5
+// version 6
